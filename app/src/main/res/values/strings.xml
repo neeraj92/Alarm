@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Alarm</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_alarm_set">Wake Me up</string>
+    <string name="set_alarm">Set Alarm</string>
+    <string name="title_activity_alarm_settings">AlarmSettingsActivity</string>
+    <string name="alarm_status">Alarm Status</string>
+    <string name="new_alarm_button">New Alarm</string>
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    <string name="delete">Delete</string>
+    <string name="dismiss">Dismiss</string>
+    <string name="title_activity_alarm">Alarm</string>
+    <string name="snooze">Snooze</string>
+    <string name="title_activity_application_select">ApplicationSelectActivity</string>
+    <string name="launch">Launch</string>
+
+</resources>
