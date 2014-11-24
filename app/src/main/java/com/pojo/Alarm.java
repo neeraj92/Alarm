@@ -11,7 +11,16 @@ public class Alarm implements Serializable, Comparable<Alarm> {
     private Time alarmTime;
     private boolean isEnabled;
     private ApplicationDetails launchAppDetails;
+    private boolean vibrate;
 
+    public void setVibrate(boolean vibrate) {
+        this.vibrate = vibrate;
+    }
+
+    public boolean isVibrate() {
+
+        return vibrate;
+    }
 
     public Alarm() {
         this.isEnabled = false;

@@ -86,8 +86,9 @@ public class AlarmXmlManager {
         Element hours = document.createElement("Hours");
         Element minutes = document.createElement("Minutes");
         Element status = document.createElement("Status");
+        Element vibrate = document.createElement("Vibrate");
         Element defaultApp = document.createElement("DefaultApplication");
-        defaultApp.setAttribute("Name" , alarm.getLaunchAppDetails().getApplicationName());
+        defaultApp.setAttribute("Name", alarm.getLaunchAppDetails().getApplicationName());
 
         Text hoursText = document.createTextNode(Integer.toString(alarm.getHour()));
         Text minutesText = document.createTextNode(Integer.toString(alarm.getMinutes()));
@@ -100,15 +101,24 @@ public class AlarmXmlManager {
             statusText = document.createTextNode("Off");
         }
 
+        Text vibrateText = null;
+        if (alarm.isVibrate()) {
+            vibrateText = document.createTextNode("True");
+        } else {
+            vibrateText = document.createTextNode("False");
+        }
+
 
         hours.appendChild(hoursText);
         minutes.appendChild(minutesText);
         status.appendChild(statusText);
+        vibrate.appendChild(vibrateText);
         defaultApp.appendChild(defaultAppPackageName);
 
         element.appendChild(hours);
         element.appendChild(minutes);
         element.appendChild(status);
+        element.appendChild(vibrate);
         element.appendChild(defaultApp);
 
 
@@ -155,18 +165,24 @@ public class AlarmXmlManager {
                 alarm.setHour(Integer.parseInt(alarmElement.getElementsByTagName("Hours").item(0).getTextContent()));
                 alarm.setMinutes(Integer.parseInt(alarmElement.getElementsByTagName("Minutes").item(0).getTextContent()));
 
-                Element defaultAppElement = (Element)alarmElement.getElementsByTagName("DefaultApplication").item(0);
+                Element defaultAppElement = (Element) alarmElement.getElementsByTagName("DefaultApplication").item(0);
                 alarm.getLaunchAppDetails().setApplicationName(defaultAppElement.getAttribute("Name"));
                 alarm.getLaunchAppDetails().setPackageName(defaultAppElement.getTextContent());
 
                 String status = alarmElement.getElementsByTagName("Status").item(0).getTextContent().toString();
-                Log.d("XmlManager", "Status:" + alarmElement.getElementsByTagName("Status").item(0).getTextContent());
-                if (status .equals("On")) {
-                    Log.d("XmlManager", "Status set to true");
+                if (status.equals("On")) {
                     alarm.setEnabled(true);
                 } else {
                     alarm.setEnabled(false);
                 }
+
+                String vibrate = alarmElement.getElementsByTagName("Vibrate").item(0).getTextContent().toString();
+                if (vibrate.equals("True")) {
+                    alarm.setVibrate(true);
+                } else {
+                    alarm.setVibrate(false);
+                }
+
 
                 alarm.setAlarmTimeHour(alarm.getHour());
                 alarm.setAlarmMinute(alarm.getMinutes());

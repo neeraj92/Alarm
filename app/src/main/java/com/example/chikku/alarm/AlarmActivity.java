@@ -12,6 +12,7 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.PowerManager;
+import android.os.Vibrator;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -33,6 +34,7 @@ public class AlarmActivity extends Activity {
 
     private PowerManager.WakeLock wakeLock = null;
     private KeyguardManager.KeyguardLock keyguardLock = null;
+    private Vibrator vibrator = null;
     private Timer killActivityTimer = null;
     private Ringtone ringtone;
     private String alarmName = "";
@@ -43,7 +45,7 @@ public class AlarmActivity extends Activity {
         setContentView(R.layout.activity_alarm);
 
         alarmName = getIntent().getStringExtra(AlarmsReceiver.ALARM_NAME);
-        Log.d("Alarm", "Creating alarm for:" + alarmName);
+        Log.d("Alarm", "Creating alarmRingtone for:" + alarmName);
 
         EditText textEdit = (EditText) findViewById(R.id.snooze_time);
         textEdit.setText("10");
@@ -74,9 +76,18 @@ public class AlarmActivity extends Activity {
             }
         }, 60000);
 
-        Uri alarm = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
-        this.ringtone = RingtoneManager.getRingtone(getApplicationContext(), alarm);
+        Uri alarmRingtone = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
+        this.ringtone = RingtoneManager.getRingtone(getApplicationContext(), alarmRingtone);
         this.ringtone.play();
+
+        Alarm alarm = com.chikku.utils.AlarmManager.getInstance().getAlarmByName(alarmName);
+        if (alarm.isVibrate()) {
+            this.vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+            long[] pattern = {500, 500};
+            vibrator.vibrate(pattern, 0);
+
+        }
+
         setTitle(alarmName);
 
     }
@@ -121,6 +132,9 @@ public class AlarmActivity extends Activity {
         wakeLock.release();
         keyguardLock.reenableKeyguard();
         this.killActivityTimer.cancel();
+        if (this.vibrator != null) {
+            this.vibrator.cancel();
+        }
 
         this.ringtone.stop();
 
@@ -130,8 +144,10 @@ public class AlarmActivity extends Activity {
 
     private void cleanUpAfterAlarmWithoutLock() {
         this.killActivityTimer.cancel();
-
         this.ringtone.stop();
+        if (this.vibrator != null) {
+            this.vibrator.cancel();
+        }
 
         AlarmsHandler.setAlarm(getApplicationContext());
         finish();

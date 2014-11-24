@@ -67,12 +67,10 @@ public class AlarmSettingsActivity extends Activity {
     private void setValues() {
         TimePicker timePicker = (TimePicker) findViewById(R.id.alarm_settings_time_picker);
         Switch statusSwitch = (Switch) findViewById(R.id.alarm_status_switch);
+        Switch vibrateSwitch = (Switch) findViewById(R.id.vibrate_switch);
 
-        if (this.alarm.isEnabled()) {
-            statusSwitch.setChecked(true);
-        } else {
-            statusSwitch.setChecked(false);
-        }
+        statusSwitch.setChecked(this.alarm.isEnabled());
+        vibrateSwitch.setChecked(this.alarm.isVibrate());
 
         timePicker.setCurrentHour(this.alarm.getHour());
         timePicker.setCurrentMinute(this.alarm.getMinutes());
@@ -115,10 +113,12 @@ public class AlarmSettingsActivity extends Activity {
         TimePicker timePicker = (TimePicker) findViewById(R.id.alarm_settings_time_picker);
         Switch statusSwitch = (Switch) findViewById(R.id.alarm_status_switch);
         TextView defaultAppName = (TextView) findViewById(R.id.default_application_name);
+        Switch vibrateSwitch = (Switch) findViewById(R.id.vibrate_switch);
 
         AlarmManager manager = AlarmManager.getInstance();
 
         this.alarm.setEnabled(statusSwitch.isChecked());
+        this.alarm.setVibrate(vibrateSwitch.isChecked());
 
 
         this.alarm.setHour(timePicker.getCurrentHour());
